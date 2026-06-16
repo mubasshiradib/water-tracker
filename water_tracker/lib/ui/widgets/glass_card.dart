@@ -11,7 +11,7 @@ class GlassCard extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
 
   const GlassCard({
-    Key? key,
+    super.key,
     required this.child,
     this.blur = 15.0,
     this.borderRadius = 24.0,
@@ -19,7 +19,7 @@ class GlassCard extends StatelessWidget {
     this.backgroundOpacity = 0.15,
     this.padding = const EdgeInsets.all(16.0),
     this.margin,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class GlassCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 20,
             spreadRadius: -4,
             offset: const Offset(0, 8),
@@ -44,17 +44,17 @@ class GlassCard extends StatelessWidget {
             padding: padding,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
-              color: Colors.white.withOpacity(backgroundOpacity),
+              color: Colors.white.withValues(alpha: backgroundOpacity),
               border: Border.all(
-                color: Colors.white.withOpacity(borderOpacity),
+                color: Colors.white.withValues(alpha: borderOpacity),
                 width: 1.5,
               ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(backgroundOpacity * 1.5),
-                  Colors.white.withOpacity(backgroundOpacity * 0.5),
+                  Colors.white.withValues(alpha: backgroundOpacity * 1.5),
+                  Colors.white.withValues(alpha: backgroundOpacity * 0.5),
                 ],
                 stops: const [0.0, 1.0],
               ),

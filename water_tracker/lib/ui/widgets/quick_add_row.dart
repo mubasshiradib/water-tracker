@@ -5,7 +5,7 @@ import '../../providers/water_provider.dart';
 import 'glass_button.dart';
 
 class QuickAddRow extends ConsumerWidget {
-  const QuickAddRow({Key? key}) : super(key: key);
+  const QuickAddRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +38,7 @@ class QuickAddRow extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      backgroundColor: const Color(0xff1976d2).withOpacity(0.85),
+                      backgroundColor: const Color(0xff1976d2).withValues(alpha: 0.85),
                       duration: const Duration(seconds: 1),
                       behavior: SnackBarBehavior.floating,
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -70,7 +70,7 @@ class QuickAddRow extends ConsumerWidget {
               ),
             ),
           );
-        }).toList(),
+        }),
         
         // Custom add button
         Expanded(
@@ -119,20 +119,20 @@ class QuickAddRow extends ConsumerWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.white.withOpacity(0.95),
-                      Colors.white.withOpacity(0.85),
+                      Colors.white.withValues(alpha: 0.95),
+                      Colors.white.withValues(alpha: 0.85),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     width: 1.5,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 24,
                       offset: const Offset(0, 10),
                     )
@@ -167,10 +167,10 @@ class QuickAddRow extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                           decoration: BoxDecoration(
-                            color: const Color(0xff1e88e5).withOpacity(0.1),
+                            color: const Color(0xff1e88e5).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: const Color(0xff1e88e5).withOpacity(0.2),
+                              color: const Color(0xff1e88e5).withValues(alpha: 0.2),
                             ),
                           ),
                           child: Text(

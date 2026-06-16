@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../providers/water_provider.dart';
 import 'glass_card.dart';
+import 'wave_empty_state.dart';
 
 class LogHistory extends ConsumerWidget {
-  const LogHistory({Key? key}) : super(key: key);
+  const LogHistory({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,26 +22,14 @@ class LogHistory extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.3),
-                  border: Border.all(color: Colors.white.withOpacity(0.6), width: 2),
-                ),
-                child: const Icon(
-                  Icons.self_improvement_rounded,
-                  size: 64,
-                  color: Color(0xff64b5f6),
-                ),
-              ),
-              const SizedBox(height: 20),
+              const WaveEmptyState(size: 130),
+              const SizedBox(height: 24),
               Text(
                 'A fresh start!',
                 style: GoogleFonts.outfit(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xff1565c0).withOpacity(0.8),
+                  color: const Color(0xff1565c0).withValues(alpha: 0.8),
                 ),
               ),
               const SizedBox(height: 8),
@@ -50,7 +39,7 @@ class LogHistory extends ConsumerWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xff1565c0).withOpacity(0.6),
+                  color: const Color(0xff1565c0).withValues(alpha: 0.6),
                   height: 1.4,
                 ),
               ),
@@ -78,10 +67,10 @@ class LogHistory extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xff1e88e5).withOpacity(0.12),
+                  color: const Color(0xff1e88e5).withValues(alpha: 0.12),
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xff1e88e5).withOpacity(0.2),
+                    color: const Color(0xff1e88e5).withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
@@ -110,7 +99,7 @@ class LogHistory extends ConsumerWidget {
                       style: GoogleFonts.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xff1565c0).withOpacity(0.7),
+                        color: const Color(0xff1565c0).withValues(alpha: 0.7),
                       ),
                     ),
                   ],
@@ -134,7 +123,7 @@ class LogHistory extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      backgroundColor: Colors.redAccent.withOpacity(0.9),
+                      backgroundColor: Colors.redAccent.withValues(alpha: 0.9),
                       duration: const Duration(seconds: 1),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(

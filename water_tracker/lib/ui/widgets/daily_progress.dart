@@ -8,10 +8,10 @@ class DailyProgress extends StatelessWidget {
   final int dailyGoal;
 
   const DailyProgress({
-    Key? key,
+    super.key,
     required this.currentIntake,
     required this.dailyGoal,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,66 +26,68 @@ class DailyProgress extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             // Inner Frosted Glass Face (blurred background visible through it)
-            ClipOval(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                child: Container(
-                  width: 240,
-                  height: 240,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withOpacity(0.15),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.35),
-                      width: 1.5,
+            RepaintBoundary(
+              child: ClipOval(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                  child: Container(
+                    width: 240,
+                    height: 240,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.15),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.35),
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xff1e88e5).withValues(alpha: 0.08),
+                          blurRadius: 30,
+                          spreadRadius: 4,
+                        ),
+                      ],
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xff1e88e5).withOpacity(0.08),
-                        blurRadius: 30,
-                        spreadRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TweenAnimationBuilder<double>(
-                        tween: Tween<double>(begin: 0, end: 1),
-                        duration: const Duration(milliseconds: 1200),
-                        curve: Curves.elasticOut,
-                        builder: (context, scale, child) {
-                          return Transform.scale(
-                            scale: scale,
-                            child: const Icon(
-                              Icons.water_drop_rounded,
-                              size: 42,
-                              color: Color(0xff29b6f6),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${(value * 100).toStringAsFixed(0)}%',
-                        style: GoogleFonts.outfit(
-                          fontSize: 48,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xff0d47a1),
-                          height: 1.1,
-                          letterSpacing: -1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TweenAnimationBuilder<double>(
+                          tween: Tween<double>(begin: 0, end: 1),
+                          duration: const Duration(milliseconds: 1200),
+                          curve: Curves.elasticOut,
+                          builder: (context, scale, child) {
+                            return Transform.scale(
+                              scale: scale,
+                              child: const Icon(
+                                Icons.water_drop_rounded,
+                                size: 42,
+                                color: Color(0xff29b6f6),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Hydration Target',
-                        style: GoogleFonts.outfit(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xff1565c0).withOpacity(0.8),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${(value * 100).toStringAsFixed(0)}%',
+                          style: GoogleFonts.outfit(
+                            fontSize: 48,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xff0d47a1),
+                            height: 1.1,
+                            letterSpacing: -1,
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          'Hydration Target',
+                          style: GoogleFonts.outfit(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xff1565c0).withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -97,7 +99,7 @@ class DailyProgress extends StatelessWidget {
               child: CustomPaint(
                 painter: ProgressPainter(
                   progress: value,
-                  trackColor: Colors.white.withOpacity(0.1),
+                  trackColor: Colors.white.withValues(alpha: 0.1),
                   progressGradient: const LinearGradient(
                     colors: [
                       Color(0xff4fc3f7), // Bright cyan/aqua
@@ -147,7 +149,7 @@ class ProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 16.0
       ..strokeCap = StrokeCap.round
-      ..color = const Color(0xff4fc3f7).withOpacity(0.3)
+      ..color = const Color(0xff4fc3f7).withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     canvas.drawArc(

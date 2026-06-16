@@ -12,7 +12,7 @@ class GlassButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const GlassButton({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.child,
     this.borderRadius = 16.0,
@@ -21,7 +21,7 @@ class GlassButton extends StatelessWidget {
     this.opacity = 0.15,
     this.borderOpacity = 0.25,
     this.padding = const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +34,18 @@ class GlassButton extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
           child: Material(
-            color: (color ?? Colors.white).withOpacity(opacity),
+            color: (color ?? Colors.white).withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(borderRadius),
             child: InkWell(
               borderRadius: BorderRadius.circular(borderRadius),
               onTap: onTap,
-              splashColor: Colors.white.withOpacity(0.15),
-              highlightColor: Colors.white.withOpacity(0.08),
+              splashColor: Colors.white.withValues(alpha: 0.15),
+              highlightColor: Colors.white.withValues(alpha: 0.08),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
                   border: Border.all(
-                    color: (color ?? Colors.white).withOpacity(borderOpacity),
+                    color: (color ?? Colors.white).withValues(alpha: borderOpacity),
                     width: 1.2,
                   ),
                 ),

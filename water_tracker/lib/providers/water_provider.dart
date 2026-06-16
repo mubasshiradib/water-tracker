@@ -7,11 +7,13 @@ class WaterState {
   final int dailyGoal; // in ml, e.g. 2000
   final List<WaterLog> logs;
   final DateTime lastResetDate;
+  final bool remindersEnabled;
 
   WaterState({
     required this.dailyGoal,
     required this.logs,
     required this.lastResetDate,
+    required this.remindersEnabled,
   });
 
   int get currentIntake => logs.fold(0, (sum, log) => sum + log.amount);
@@ -21,11 +23,13 @@ class WaterState {
     int? dailyGoal,
     List<WaterLog>? logs,
     DateTime? lastResetDate,
+    bool? remindersEnabled,
   }) {
     return WaterState(
       dailyGoal: dailyGoal ?? this.dailyGoal,
       logs: logs ?? this.logs,
       lastResetDate: lastResetDate ?? this.lastResetDate,
+      remindersEnabled: remindersEnabled ?? this.remindersEnabled,
     );
   }
 
@@ -34,6 +38,7 @@ class WaterState {
       'dailyGoal': dailyGoal,
       'logs': logs.map((log) => log.toJson()).toList(),
       'lastResetDate': lastResetDate.toIso8601String(),
+      'remindersEnabled': remindersEnabled,
     };
   }
 
@@ -47,6 +52,7 @@ class WaterState {
       lastResetDate: json['lastResetDate'] != null
           ? DateTime.parse(json['lastResetDate'] as String)
           : DateTime.now(),
+      remindersEnabled: json['remindersEnabled'] as bool? ?? true,
     );
   }
 }
@@ -58,7 +64,7 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 // Water tracker state provider using the modern Riverpod Notifier API
 class WaterNotifier extends Notifier<WaterState> {
-  static const String _storageKey = 'water_tracker_state_v1';
+  static const String _storageKey = 'water_tracker_state_v2'; // Bumped storage version key to avoid parsing errors
 
   @override
   WaterState build() {
@@ -78,6 +84,7 @@ class WaterNotifier extends Notifier<WaterState> {
             dailyGoal: loadedState.dailyGoal,
             logs: [],
             lastResetDate: today,
+            remindersEnabled: loadedState.remindersEnabled,
           );
           Future.microtask(() => _saveState(newState));
           return newState;
@@ -87,7 +94,7 @@ class WaterNotifier extends Notifier<WaterState> {
       }
     }
     final today = DateTime.now();
-    final defaultState = WaterState(dailyGoal: 2000, logs: [], lastResetDate: today);
+    final defaultState = WaterState(dailyGoal: 2000, logs: [], lastResetDate: today, remindersEnabled: true);
     Future.microtask(() => _saveState(defaultState));
     return defaultState;
   }
@@ -138,6 +145,12 @@ class WaterNotifier extends Notifier<WaterState> {
       state = state.copyWith(dailyGoal: newGoal);
       _saveState();
     }
+  }
+
+  void setRemindersEnabled(bool value) {
+    checkDailyReset();
+    state = state.copyWith(remindersEnabled: value);
+    _saveState();
   }
 
   void resetToday() {
