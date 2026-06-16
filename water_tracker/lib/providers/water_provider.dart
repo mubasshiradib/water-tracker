@@ -17,7 +17,8 @@ class WaterState {
   });
 
   int get currentIntake => logs.fold(0, (sum, log) => sum + log.amount);
-  double get progressPercentage => dailyGoal > 0 ? (currentIntake / dailyGoal).clamp(0.0, 1.0) : 0.0;
+  double get progressPercentage =>
+      dailyGoal > 0 ? (currentIntake / dailyGoal).clamp(0.0, 1.0) : 0.0;
 
   WaterState copyWith({
     int? dailyGoal,
@@ -59,12 +60,14 @@ class WaterState {
 
 // Global provider for shared preferences
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError();
+  throw UnimplementedError(
+      'sharedPreferencesProvider must be overridden in ProviderScope in main.dart');
 });
 
 // Water tracker state provider using the modern Riverpod Notifier API
 class WaterNotifier extends Notifier<WaterState> {
-  static const String _storageKey = 'water_tracker_state_v2'; // Bumped storage version key to avoid parsing errors
+  static const String _storageKey =
+      'water_tracker_state_v2'; // Bumped storage version key to avoid parsing errors
 
   @override
   WaterState build() {
@@ -74,7 +77,7 @@ class WaterNotifier extends Notifier<WaterState> {
       try {
         final Map<String, dynamic> decoded = jsonDecode(jsonString);
         final loadedState = WaterState.fromJson(decoded);
-        
+
         final today = DateTime.now();
         if (_isSameDay(today, loadedState.lastResetDate)) {
           return loadedState;
@@ -94,7 +97,11 @@ class WaterNotifier extends Notifier<WaterState> {
       }
     }
     final today = DateTime.now();
-    final defaultState = WaterState(dailyGoal: 2000, logs: [], lastResetDate: today, remindersEnabled: true);
+    final defaultState = WaterState(
+        dailyGoal: 2000,
+        logs: [],
+        lastResetDate: today,
+        remindersEnabled: true);
     Future.microtask(() => _saveState(defaultState));
     return defaultState;
   }
@@ -162,4 +169,5 @@ class WaterNotifier extends Notifier<WaterState> {
   }
 }
 
-final waterProvider = NotifierProvider<WaterNotifier, WaterState>(WaterNotifier.new);
+final waterProvider =
+    NotifierProvider<WaterNotifier, WaterState>(WaterNotifier.new);

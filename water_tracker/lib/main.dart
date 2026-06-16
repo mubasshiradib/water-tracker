@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ui/screens/home_screen.dart';
 import 'providers/water_provider.dart';
-import 'core/services/notification_service.dart';
-import 'core/services/gemma_service.dart';
+import 'package:water_tracker/core/services/notification_service.dart';
+import 'package:water_tracker/core/services/gemma_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
