@@ -9,6 +9,9 @@ class GemmaService {
   dynamic _gemmaPlugin;
 
   Future<void> initialize() async {
+    // TEMPORARY: Bypassing Gemma initialization to prevent native crash on Android emulator
+    _isInitialized = false;
+    return;
     try {
       await FlutterGemma.initialize();
       _gemmaPlugin = FlutterGemmaPlugin.instance;
