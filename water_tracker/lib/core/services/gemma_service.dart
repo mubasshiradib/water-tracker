@@ -9,6 +9,10 @@ class GemmaService {
   dynamic _gemmaPlugin;
 
   Future<void> initialize() async {
+    // TEMPORARY: Bypassing Gemma initialization to prevent native crash on Android emulator
+    _isInitialized = false;
+    return;
+    /*
     try {
       await FlutterGemma.initialize();
       _gemmaPlugin = FlutterGemmaPlugin.instance;
@@ -17,6 +21,7 @@ class GemmaService {
       // Catch initialization errors gracefully (e.g. on unsupported platforms or missing models)
       _isInitialized = false;
     }
+    */
   }
 
   Future<String> generateReminderMessage({required int currentIntake, required int dailyGoal}) async {

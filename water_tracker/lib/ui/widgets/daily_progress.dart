@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,89 +24,72 @@ class DailyProgress extends StatelessWidget {
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Inner Frosted Glass Face (blurred background visible through it)
-            RepaintBoundary(
-              child: ClipOval(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                  child: Container(
-                    width: 240,
-                    height: 240,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white.withValues(alpha: 0.15),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.35),
-                        width: 1.5,
+            // Inner Text Data
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '$currentIntake',
+                        style: GoogleFonts.inter(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w800,
+                          color: const Color(0xff331A1A),
+                          letterSpacing: -0.5,
+                        ),
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xff1e88e5).withValues(alpha: 0.08),
-                          blurRadius: 30,
-                          spreadRadius: 4,
+                      TextSpan(
+                        text: ' ml',
+                        style: GoogleFonts.inter(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xff331A1A).withValues(alpha: 0.6),
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TweenAnimationBuilder<double>(
-                          tween: Tween<double>(begin: 0, end: 1),
-                          duration: const Duration(milliseconds: 1200),
-                          curve: Curves.elasticOut,
-                          builder: (context, scale, child) {
-                            return Transform.scale(
-                              scale: scale,
-                              child: const Icon(
-                                Icons.water_drop_rounded,
-                                size: 42,
-                                color: Color(0xff29b6f6),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '${(value * 100).toStringAsFixed(0)}%',
-                          style: GoogleFonts.outfit(
-                            fontSize: 48,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xff0d47a1),
-                            height: 1.1,
-                            letterSpacing: -1,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Hydration Target',
-                          style: GoogleFonts.outfit(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xff1565c0).withValues(alpha: 0.8),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                Container(
+                  height: 2,
+                  width: 64,
+                  margin: const EdgeInsets.symmetric(vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff331A1A).withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Text(
+                  '${dailyGoal}ml',
+                  style: GoogleFonts.inter(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xff331A1A).withValues(alpha: 0.8),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'TODAY\'S GOAL: ${(value * 100).toStringAsFixed(0)}%',
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFFFF6B6B),
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ],
             ),
-            // Animated Progress Arc around the glass circle
+            // Animated Progress Arc around the circle
             SizedBox(
-              width: 260,
-              height: 260,
+              width: 240,
+              height: 240,
               child: CustomPaint(
                 painter: ProgressPainter(
                   progress: value,
-                  trackColor: Colors.white.withValues(alpha: 0.1),
-                  progressGradient: const LinearGradient(
-                    colors: [
-                      Color(0xff4fc3f7), // Bright cyan/aqua
-                      Color(0xff1e88e5), // Electric royal blue
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
+                  trackColor: Colors.white.withValues(alpha: 0.8),
+                  progressColor: const Color(0xFFFF6B6B),
                 ),
               ),
             ),
@@ -121,24 +103,24 @@ class DailyProgress extends StatelessWidget {
 class ProgressPainter extends CustomPainter {
   final double progress;
   final Color trackColor;
-  final Gradient progressGradient;
+  final Color progressColor;
 
   ProgressPainter({
     required this.progress,
     required this.trackColor,
-    required this.progressGradient,
+    required this.progressColor,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = min(size.width, size.height) / 2 - 4;
+    final radius = min(size.width, size.height) / 2 - 8;
 
     // Background track
     final trackPaint = Paint()
       ..color = trackColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10.0;
+      ..strokeWidth = 16.0;
 
     canvas.drawCircle(center, radius, trackPaint);
 
@@ -149,7 +131,7 @@ class ProgressPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 16.0
       ..strokeCap = StrokeCap.round
-      ..color = const Color(0xff4fc3f7).withValues(alpha: 0.3)
+      ..color = progressColor.withValues(alpha: 0.6)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
 
     canvas.drawArc(
@@ -162,11 +144,9 @@ class ProgressPainter extends CustomPainter {
 
     // Core progress arc
     final progressPaint = Paint()
-      ..shader = progressGradient.createShader(
-        Rect.fromCircle(center: center, radius: radius),
-      )
+      ..color = progressColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 10.0
+      ..strokeWidth = 16.0
       ..strokeCap = StrokeCap.round;
 
     canvas.drawArc(

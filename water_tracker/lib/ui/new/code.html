@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Light Hydration Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-utilities">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      /* Very light reddish/pink gradient background */
+      background: linear-gradient(135deg, #FFF5F5 0%, #FFE4E1 100%);
+      background-attachment: fixed;
+      color: #331A1A;
+    }
+
+    .font-header {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Light Glassmorphism base classes */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 10px 40px -10px rgba(255, 150, 150, 0.15);
+    }
+
+    .glass-button {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px -2px rgba(255, 150, 150, 0.1);
+    }
+
+    .glass-button:active {
+      background: rgba(255, 255, 255, 0.8);
+      transform: scale(0.98);
+      box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+      border-color: rgba(255, 255, 255, 1);
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    /* Soft glow effect for accents */
+    .neon-text-coral {
+      color: #FF6B6B;
+      text-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+    }
+
+    /* SVG Stroke Glow */
+    .svg-glow-coral {
+      filter: drop-shadow(0 0 4px rgba(255, 107, 107, 0.5));
+    }
+
+    /* Custom Progress Ring Animation setup */
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.5s ease-in-out;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      filter: drop-shadow(0 0 8px rgba(255, 107, 107, 0.6));
+    }
+    
+    .progress-ring__track {
+      filter: drop-shadow(0 2px 4px rgba(255, 150, 150, 0.1));
+    }
+
+    /* Hide scrollbar for neatness */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen w-full flex flex-col items-center justify-center bg-gray-50 overflow-hidden select-none">
+<!-- Mobile Device Container (simulating phone screen) -->
+<div class="relative w-full h-[100dvh] max-w-[430px] flex flex-col overflow-hidden shadow-2xl bg-transparent ring-1 ring-black/5" data-purpose="mobile-container">
+<!-- Status Bar (Mock) -->
+<div class="w-full h-12 flex justify-between items-center px-6 pt-2 z-50 text-[#331A1A] text-sm font-semibold tracking-wider">
+<span>9:41</span>
+<div class="flex items-center space-x-2">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path d="M2 11.5a8.38 8.38 0 013.38-6.66L4.2 3.65a1 1 0 011.6-.96l1.39 1.15A8.34 8.34 0 0110 3a8.34 8.34 0 012.82.48l1.4-1.16a1 1 0 011.6.96l-1.2 1.19A8.38 8.38 0 0118 11.5V17a1 1 0 01-1 1H3a1 1 0 01-1-1v-5.5z"></path></svg>
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M17.778 8.222c-4.296-4.296-11.26-4.296-15.556 0A1 1 0 01.808 6.808c5.076-5.077 13.308-5.077 18.384 0a1 1 0 01-1.414 1.414zM14.95 11.05a7 7 0 00-9.9 0 1 1 0 01-1.414-1.414 9 9 0 0112.728 0 1 1 0 01-1.414 1.414zM12.12 13.88a3 3 0 00-4.242 0 1 1 0 01-1.415-1.415 5 5 0 017.072 0 1 1 0 01-1.415 1.415zM9 16a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" fill-rule="evenodd"></path></svg>
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm10 0v10H5V5h8z" fill-rule="evenodd"></path></svg>
+</div>
+</div>
+<!-- Scrollable Content Area -->
+<main class="flex-1 overflow-y-auto pb-24 px-5 pt-4 z-10" data-purpose="main-content">
+<!-- BEGIN: Header Section -->
+<header class="flex justify-between items-center mb-6">
+<h1 class="text-3xl font-extrabold font-header tracking-tight text-[#331A1A]">Hydration<br/><span class="text-[#FF6B6B]">Dashboard</span></h1>
+<button aria-label="Settings" class="p-2 rounded-full glass-button hover:bg-white/80">
+<svg class="w-6 h-6 text-[#331A1A]" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Main Progress Card -->
+<section class="glass-panel rounded-[2rem] p-6 mb-8 relative flex flex-col items-center justify-center min-h-[320px]" data-purpose="progress-tracker">
+<!-- Circular Progress Chart -->
+<div class="relative w-64 h-64 flex items-center justify-center">
+<svg class="w-full h-full" viewbox="0 0 200 200">
+<!-- Track -->
+<circle class="progress-ring__track text-white/80" cx="100" cy="100" fill="transparent" r="80" stroke="currentColor" stroke-width="16"></circle>
+<!-- Progress (simulating 48% with stroke-dasharray and stroke-dashoffset) -->
+<!-- Circumference = 2 * pi * 80 ~= 502 -->
+<!-- 48% of 502 = 241 -->
+<!-- Dashoffset = 502 - 241 = 261 -->
+<circle class="progress-ring__circle text-[#FF6B6B]" cx="100" cy="100" fill="transparent" r="80" stroke="currentColor" stroke-linecap="round" stroke-width="16" style="stroke-dasharray: 502; stroke-dashoffset: 261;"></circle>
+</svg>
+<!-- Inner Text Data -->
+<div class="absolute flex flex-col items-center justify-center mt-2">
+<span class="text-3xl font-bold font-header tracking-tight text-[#331A1A]">1200<span class="text-lg text-[#331A1A]/60 ml-1">ml</span></span>
+<div class="h-[2px] w-16 bg-[#331A1A]/10 my-1 rounded-full"></div>
+<span class="text-lg text-[#331A1A]/80 font-semibold tracking-wide">2500ml</span>
+<span class="text-xs text-[#FF6B6B] mt-2 tracking-widest uppercase font-bold">Today's Goal: 48%</span>
+</div>
+</div>
+</section>
+<!-- END: Main Progress Card -->
+<!-- BEGIN: Quick Add Section -->
+<section class="mb-8" data-purpose="quick-add">
+<h2 class="text-xl font-header font-bold mb-4 text-[#331A1A] px-1">Quick Add</h2>
+<div class="flex justify-between gap-3">
+<!-- Quick Add Button 1 -->
+<button class="glass-button flex-1 py-3 px-2 rounded-2xl flex items-center justify-center gap-2 group hover:bg-white/70">
+<svg class="w-5 h-5 text-[#FF6B6B] svg-glow-coral group-hover:text-[#FF5252] transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-bold text-[#331A1A] text-sm">250ml</span>
+</button>
+<!-- Quick Add Button 2 -->
+<button class="glass-button flex-1 py-3 px-2 rounded-2xl flex items-center justify-center gap-2 group hover:bg-white/70">
+<svg class="w-5 h-5 text-[#FF6B6B] svg-glow-coral group-hover:text-[#FF5252] transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-bold text-[#331A1A] text-sm">500ml</span>
+</button>
+<!-- Quick Add Button 3 -->
+<button class="glass-button flex-1 py-3 px-2 rounded-2xl flex items-center justify-center gap-2 group hover:bg-white/70">
+<svg class="w-5 h-5 text-[#FF6B6B] svg-glow-coral group-hover:text-[#FF5252] transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="font-bold text-[#331A1A] text-sm">750ml</span>
+</button>
+</div>
+</section>
+<!-- END: Quick Add Section -->
+<!-- BEGIN: Recent Activity Section -->
+<section data-purpose="recent-activity">
+<h2 class="text-xl font-header font-bold mb-4 text-[#331A1A] px-1">Recent Activity</h2>
+<div class="glass-panel rounded-3xl p-[1px] overflow-hidden flex flex-col gap-[1px] bg-white/20">
+<!-- Activity Item 1 -->
+<div class="flex items-center justify-between p-4 bg-white/40 hover:bg-white/60 transition-colors first:rounded-t-3xl last:rounded-b-3xl">
+<div class="flex items-center gap-4">
+<div class="p-2 rounded-full bg-white/60 shadow-sm">
+<svg class="w-5 h-5 text-[#FF6B6B]" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-semibold text-[#331A1A] text-[15px]">Water Intake</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-bold text-[#331A1A] tracking-wide text-[15px]">300<span class="text-xs text-[#331A1A]/60 ml-[2px]">ml</span></span>
+<span class="text-xs text-[#331A1A]/50 font-medium min-w-[70px] text-right">11 hours ago</span>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center justify-between p-4 bg-white/40 hover:bg-white/60 transition-colors first:rounded-t-3xl last:rounded-b-3xl">
+<div class="flex items-center gap-4">
+<div class="p-2 rounded-full bg-white/60 shadow-sm">
+<svg class="w-5 h-5 text-[#FF6B6B]" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-semibold text-[#331A1A] text-[15px]">Water Intake</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-bold text-[#331A1A] tracking-wide text-[15px]">300<span class="text-xs text-[#331A1A]/60 ml-[2px]">ml</span></span>
+<span class="text-xs text-[#331A1A]/50 font-medium min-w-[70px] text-right">11 hours ago</span>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center justify-between p-4 bg-white/40 hover:bg-white/60 transition-colors first:rounded-t-3xl last:rounded-b-3xl">
+<div class="flex items-center gap-4">
+<div class="p-2 rounded-full bg-white/60 shadow-sm">
+<svg class="w-5 h-5 text-[#FF6B6B]" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-semibold text-[#331A1A] text-[15px]">Water Intake</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-bold text-[#331A1A] tracking-wide text-[15px]">300<span class="text-xs text-[#331A1A]/60 ml-[2px]">ml</span></span>
+<span class="text-xs text-[#331A1A]/50 font-medium min-w-[70px] text-right">11 hours ago</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Recent Activity Section -->
+</main>
+<!-- BEGIN: Bottom Navigation -->
+<nav class="absolute bottom-0 w-full glass-nav pb-8 pt-3 px-6 z-20" data-purpose="bottom-navigation">
+<ul class="flex justify-between items-center text-[#331A1A]/60">
+<!-- Dashboard (Active) -->
+<li class="flex flex-col items-center gap-1 cursor-pointer group">
+<div class="relative">
+<svg class="w-6 h-6 text-[#FF6B6B] drop-shadow-sm transition-transform group-hover:scale-110" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+<div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#FF6B6B] rounded-full"></div>
+</div>
+<span class="text-[10px] font-bold tracking-wider text-[#FF6B6B] uppercase mt-1">Dashboard</span>
+</li>
+<!-- History -->
+<li class="flex flex-col items-center gap-1 cursor-pointer hover:text-[#331A1A] transition-colors group">
+<svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold tracking-wider uppercase mt-1 opacity-80 group-hover:opacity-100 transition-opacity">History</span>
+</li>
+<!-- Profile -->
+<li class="flex flex-col items-center gap-1 cursor-pointer hover:text-[#331A1A] transition-colors group">
+<svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold tracking-wider uppercase mt-1 opacity-80 group-hover:opacity-100 transition-opacity">Profile</span>
+</li>
+<!-- Settings -->
+<li class="flex flex-col items-center gap-1 cursor-pointer hover:text-[#331A1A] transition-colors group">
+<svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[10px] font-bold tracking-wider uppercase mt-1 opacity-80 group-hover:opacity-100 transition-opacity">Settings</span>
+</li>
+</ul>
+</nav>
+<!-- END: Bottom Navigation -->
+</div>
+</body></html>

@@ -39,7 +39,7 @@ class _WaveEmptyStateState extends State<WaveEmptyState> with SingleTickerProvid
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xff2196f3).withValues(alpha: 0.1),
+                color: const Color(0xFFFF6B6B).withValues(alpha: 0.1),
                 blurRadius: 16,
                 spreadRadius: 2,
               )
@@ -60,8 +60,8 @@ class _WaveEmptyStateState extends State<WaveEmptyState> with SingleTickerProvid
                     child: CustomPaint(
                       painter: _WavePainter(
                         animationValue: _controller.value,
-                        waveColor1: const Color(0xff42a5f5).withValues(alpha: 0.35),
-                        waveColor2: const Color(0xff1e88e5).withValues(alpha: 0.2),
+                        waveColor1: const Color(0xFFFF6B6B).withValues(alpha: 0.35),
+                        waveColor2: const Color(0xFFFF4D4D).withValues(alpha: 0.2),
                       ),
                     ),
                   ),
@@ -85,7 +85,7 @@ class _WaveEmptyStateState extends State<WaveEmptyState> with SingleTickerProvid
                       child: const Icon(
                         Icons.water_drop_rounded,
                         size: 32,
-                        color: Color(0xff1565c0),
+                        color: Color(0xFFFF6B6B),
                       ),
                     ),
                   ),
