@@ -12,6 +12,7 @@ import '../../core/services/gemma_service.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/daily_progress.dart';
 import '../widgets/log_history.dart';
+import '../widgets/quick_add_row.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -126,9 +127,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
       _hasCelebrated = false;
     }
 
-    // Calculate glasses (assuming 1 glass = 250ml)
-    final int glasses = (state.currentIntake / 250).floor();
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -155,47 +153,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
           ),
           // Background Soft Gradients
           RepaintBoundary(
-            child: Stack(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Color(0xffe1f5fe),
-                        Color(0xffe8eaf6),
-                        Color(0xffffffff),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFFFF5F5),
+                    Color(0xFFFFE4E1),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                // Translucent floating blobs
-                Positioned(
-                  top: -40,
-                  left: -30,
-                  child: Container(
-                    width: 260,
-                    height: 260,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xff80deea).withValues(alpha: 0.35),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 80,
-                  right: -60,
-                  child: Container(
-                    width: 320,
-                    height: 320,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: const Color(0xff90caf9).withValues(alpha: 0.4),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           // Scrollable Foreground
@@ -210,184 +178,159 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Water Tracker',
-                            style: GoogleFonts.outfit(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w800,
-                              color: const Color(0xff0d47a1),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Hydration\n',
+                              style: GoogleFonts.inter(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xff331A1A),
+                                height: 1.1,
+                                letterSpacing: -0.5,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Daily Goal: ${state.dailyGoal} ml',
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xff1565c0).withValues(alpha: 0.7),
+                            TextSpan(
+                              text: 'Dashboard',
+                              style: GoogleFonts.inter(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFFFF6B6B),
+                                height: 1.1,
+                                letterSpacing: -0.5,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      Row(
-                        children: [
-                          // Settings Button
-                          IconButton(
-                            tooltip: 'Settings',
-                            icon: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.settings_rounded,
-                                color: Color(0xff0d47a1),
-                                size: 22,
-                              ),
+                      // Settings Button
+                      IconButton(
+                        tooltip: 'Settings',
+                        icon: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.5),
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.8),
                             ),
-                            onPressed: () => _showSettingsDialog(context, state.dailyGoal, state.remindersEnabled, notifier),
-                          ),
-                          const SizedBox(width: 8),
-                          // Reset Button
-                          IconButton(
-                            tooltip: 'Reset Progress',
-                            icon: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFF9696).withValues(alpha: 0.1),
+                                blurRadius: 12,
+                                spreadRadius: -2,
+                                offset: const Offset(0, 4),
                               ),
-                              child: const Icon(
-                                Icons.refresh_rounded,
-                                color: Color(0xff0d47a1),
-                                size: 22,
-                              ),
-                            ),
-                            onPressed: () => _confirmReset(context, notifier),
+                            ],
                           ),
-                        ],
+                          child: const Icon(
+                            Icons.settings_rounded,
+                            color: Color(0xff331A1A),
+                            size: 22,
+                          ),
+                        ),
+                        onPressed: () => _showSettingsDialog(context, state.dailyGoal, state.remindersEnabled, notifier),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 32),
 
                   // Center Radial Progress
-                  Center(
-                    child: RepaintBoundary(
-                      child: DailyProgress(
-                        currentIntake: state.currentIntake,
-                        dailyGoal: state.dailyGoal,
+                  GlassCard(
+                    padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+                    child: Center(
+                      child: RepaintBoundary(
+                        child: DailyProgress(
+                          currentIntake: state.currentIntake,
+                          dailyGoal: state.dailyGoal,
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 32),
 
-                  // Summary Glass Card
-                  Center(
-                    child: GlassCard(
-                      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                      borderRadius: 30,
-                      child: Text(
-                        '$glasses glasses · ${state.currentIntake} ml of ${state.dailyGoal} ml',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xff0d47a1),
-                        ),
-                      ),
+                  // Quick Add Section
+                  Text(
+                    "Quick Add",
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xff331A1A),
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 16),
+                  const QuickAddRow(),
+                  const SizedBox(height: 32),
 
                   // History Section
                   Text(
-                    "Today's Logs",
-                    style: GoogleFonts.outfit(
+                    "Recent Activity",
+                    style: GoogleFonts.inter(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
-                      color: const Color(0xff0d47a1),
+                      color: const Color(0xff331A1A),
                     ),
                   ),
                   const SizedBox(height: 16),
                   const LogHistory(),
-                  const SizedBox(height: 100), // padding for FAB
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
           ),
         ],
       ),
-      floatingActionButton: _buildGlassFAB(context, notifier),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
-  }
-
-  Widget _buildGlassFAB(BuildContext context, WaterNotifier notifier) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff4fc3f7).withValues(alpha: 0.4),
-            blurRadius: 24,
-            spreadRadius: 2,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: ClipOval(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Material(
-            color: Colors.white.withValues(alpha: 0.2),
-            shape: CircleBorder(
-              side: BorderSide(
-                color: Colors.white.withValues(alpha: 0.6),
-                width: 1.5,
-              ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.75),
+          border: Border(
+            top: BorderSide(
+              color: Colors.white.withValues(alpha: 0.9),
+              width: 1,
             ),
-            child: InkWell(
-              onTap: () {
-                notifier.addWater(250);
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      'Added 250 ml of water!',
-                      style: GoogleFonts.outfit(color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
-                    backgroundColor: const Color(0xff1976d2).withValues(alpha: 0.85),
-                    duration: const Duration(seconds: 1),
-                    behavior: SnackBarBehavior.floating,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  ),
-                );
-              },
-              splashColor: Colors.white.withValues(alpha: 0.3),
-              highlightColor: Colors.white.withValues(alpha: 0.1),
-              child: const Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Icon(
-                  Icons.add_rounded,
-                  size: 36,
-                  color: Color(0xff0d47a1),
+          ),
+        ),
+        child: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildNavItem(icon: Icons.dashboard_rounded, label: 'DASHBOARD', isActive: true),
+                    _buildNavItem(icon: Icons.history_rounded, label: 'HISTORY', isActive: false),
+                    _buildNavItem(icon: Icons.person_outline_rounded, label: 'PROFILE', isActive: false),
+                    _buildNavItem(icon: Icons.settings_outlined, label: 'SETTINGS', isActive: false),
+                  ],
                 ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildNavItem({required IconData icon, required String label, required bool isActive}) {
+    final color = isActive ? const Color(0xFFFF6B6B) : const Color(0xff331A1A).withValues(alpha: 0.6);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: color, size: 24),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            color: color,
+            letterSpacing: 1.0,
+          ),
+        ),
+      ],
     );
   }
 
@@ -431,19 +374,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                         children: [
                           Text(
                             'Daily Hydration Goal',
-                            style: GoogleFonts.outfit(
+                            style: GoogleFonts.inter(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
-                              color: const Color(0xff0d47a1),
+                              color: const Color(0xff331A1A),
                             ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Set your target daily water intake (in ml).',
-                            style: GoogleFonts.outfit(
+                            style: GoogleFonts.inter(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: const Color(0xff1565c0).withValues(alpha: 0.8),
+                              color: const Color(0xff331A1A).withValues(alpha: 0.8),
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -454,9 +397,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                               filled: true,
                               fillColor: Colors.white.withValues(alpha: 0.4),
                               suffixText: 'ml',
-                              suffixStyle: GoogleFonts.outfit(
+                              suffixStyle: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
-                                color: const Color(0xff1565c0),
+                                color: const Color(0xff331A1A),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
@@ -467,7 +410,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide: const BorderSide(
-                                  color: Color(0xff1e88e5),
+                                  color: Color(0xFFFF6B6B),
                                   width: 1.5,
                                 ),
                               ),
@@ -485,10 +428,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                   ),
                                 ),
                               ),
-                              style: GoogleFonts.outfit(
+                              style: GoogleFonts.inter(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                color: const Color(0xff0d47a1),
+                                color: const Color(0xff331A1A),
                               ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
@@ -514,26 +457,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                   children: [
                                     Text(
                                       'Hydration Reminders',
-                                      style: GoogleFonts.outfit(
+                                      style: GoogleFonts.inter(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700,
-                                        color: const Color(0xff0d47a1),
+                                        color: const Color(0xff331A1A),
                                       ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       'Check schedule every 2 hours',
-                                      style: GoogleFonts.outfit(
+                                      style: GoogleFonts.inter(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
-                                        color: const Color(0xff1565c0).withValues(alpha: 0.7),
+                                        color: const Color(0xff331A1A).withValues(alpha: 0.7),
                                       ),
                                     ),
                                   ],
                                 ),
                                 Switch(
                                   value: remindersEnabled,
-                                  activeThumbColor: const Color(0xff1e88e5),
+                                  activeThumbColor: const Color(0xFFFF6B6B),
                                   onChanged: (value) {
                                     setDialogState(() {
                                       remindersEnabled = value;
@@ -547,25 +490,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
-                                color: Colors.blue.withValues(alpha: 0.08),
+                                color: const Color(0xFFFF6B6B).withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.blue.withValues(alpha: 0.2)),
+                                border: Border.all(color: const Color(0xFFFF6B6B).withValues(alpha: 0.2)),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const Icon(
                                     Icons.verified_user_rounded,
-                                    color: Color(0xff1e88e5),
+                                    color: Color(0xFFFF6B6B),
                                     size: 14,
                                   ),
                                   const SizedBox(width: 6),
                                   Text(
                                     'Reminders powered locally',
-                                    style: GoogleFonts.outfit(
+                                    style: GoogleFonts.inter(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: const Color(0xff0d47a1),
+                                      color: const Color(0xff331A1A),
                                     ),
                                   ),
                                 ],
@@ -577,7 +520,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                               width: double.infinity,
                               child: OutlinedButton.icon(
                                 style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Color(0xff1e88e5)),
+                                  side: const BorderSide(color: Color(0xFFFF6B6B)),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -587,11 +530,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                   Navigator.pop(context);
                                   _triggerTestReminder();
                                 },
-                                icon: const Icon(Icons.notifications_active_rounded, color: Color(0xff1e88e5), size: 18),
+                                icon: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFF6B6B), size: 18),
                                 label: Text(
                                   'Trigger Test Reminder',
-                                  style: GoogleFonts.outfit(
-                                    color: const Color(0xff1e88e5),
+                                  style: GoogleFonts.inter(
+                                    color: const Color(0xFFFF6B6B),
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14,
                                   ),
@@ -606,8 +549,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                     onPressed: () => Navigator.pop(context),
                                     child: Text(
                                       'Cancel',
-                                      style: GoogleFonts.outfit(
-                                        color: const Color(0xff1e88e5),
+                                      style: GoogleFonts.inter(
+                                        color: const Color(0xFFFF6B6B),
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -617,7 +560,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xff1e88e5),
+                                      backgroundColor: const Color(0xFFFF6B6B),
                                       foregroundColor: Colors.white,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
@@ -634,9 +577,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                           SnackBar(
                                             content: Text(
                                               'Settings updated successfully!',
-                                              style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+                                              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                                             ),
-                                            backgroundColor: const Color(0xff1e88e5),
+                                            backgroundColor: const Color(0xFFFF6B6B),
                                             duration: const Duration(seconds: 2),
                                             behavior: SnackBarBehavior.floating,
                                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -646,7 +589,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                                     },
                                     child: Text(
                                       'Save',
-                                      style: GoogleFonts.outfit(
+                                      style: GoogleFonts.inter(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -667,100 +610,4 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
     );
   }
 
-  void _confirmReset(BuildContext context, WaterNotifier notifier) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          contentPadding: EdgeInsets.zero,
-          content: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.08),
-                      blurRadius: 30,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Reset Progress',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xffd32f2f),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Clear today\'s history?',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xff1565c0).withValues(alpha: 0.8),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              'Cancel',
-                              style: GoogleFonts.outfit(
-                                color: const Color(0xff1e88e5),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xffd32f2f),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 0,
-                            ),
-                            onPressed: () {
-                              notifier.resetToday();
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.outfit(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
 }

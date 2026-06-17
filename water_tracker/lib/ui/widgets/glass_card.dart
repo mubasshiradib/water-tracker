@@ -13,10 +13,10 @@ class GlassCard extends StatelessWidget {
   const GlassCard({
     super.key,
     required this.child,
-    this.blur = 15.0,
-    this.borderRadius = 24.0,
-    this.borderOpacity = 0.25,
-    this.backgroundOpacity = 0.15,
+    this.blur = 24.0,
+    this.borderRadius = 32.0,
+    this.borderOpacity = 0.9,
+    this.backgroundOpacity = 0.65,
     this.padding = const EdgeInsets.all(16.0),
     this.margin,
   });
@@ -29,10 +29,10 @@ class GlassCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 20,
-            spreadRadius: -4,
-            offset: const Offset(0, 8),
+            color: const Color(0xFFFF9696).withValues(alpha: 0.15),
+            blurRadius: 40,
+            spreadRadius: -10,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
@@ -47,16 +47,7 @@ class GlassCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: backgroundOpacity),
               border: Border.all(
                 color: Colors.white.withValues(alpha: borderOpacity),
-                width: 1.5,
-              ),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.white.withValues(alpha: backgroundOpacity * 1.5),
-                  Colors.white.withValues(alpha: backgroundOpacity * 0.5),
-                ],
-                stops: const [0.0, 1.0],
+                width: 1.0,
               ),
             ),
             child: child,

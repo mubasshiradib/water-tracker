@@ -16,10 +16,10 @@ class GlassButton extends StatelessWidget {
     required this.onTap,
     required this.child,
     this.borderRadius = 16.0,
-    this.blur = 10.0,
+    this.blur = 12.0,
     this.color,
-    this.opacity = 0.15,
-    this.borderOpacity = 0.25,
+    this.opacity = 0.5,
+    this.borderOpacity = 0.8,
     this.padding = const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
   });
 
@@ -28,6 +28,14 @@ class GlassButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFF9696).withValues(alpha: 0.1),
+            blurRadius: 12,
+            spreadRadius: -2,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),

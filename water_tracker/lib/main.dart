@@ -36,8 +36,8 @@ class WaterTrackerApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xff1e88e5),
-          primary: const Color(0xff1e88e5),
+          seedColor: const Color(0xFFFF6B6B),
+          primary: const Color(0xFFFF6B6B),
         ),
       ),
       home: const HomeScreen(),
