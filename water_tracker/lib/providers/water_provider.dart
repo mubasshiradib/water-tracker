@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/models/water_log.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'auth_provider.dart';
 
 class WaterState {
   final int dailyGoal; // in ml, e.g. 2000
@@ -16,7 +18,7 @@ class WaterState {
     required this.remindersEnabled,
   });
 
-  int get currentIntake => logs.fold(0, (sum, log) => sum + log.amount);
+  int get currentIntake => logs.fold(0, (total, log) => total + log.amount);
   double get progressPercentage =>
       dailyGoal > 0 ? (currentIntake / dailyGoal).clamp(0.0, 1.0) : 0.0;
 
@@ -72,6 +74,12 @@ class WaterNotifier extends Notifier<WaterState> {
   @override
   WaterState build() {
     final prefs = ref.watch(sharedPreferencesProvider);
+    final user = ref.watch(authProvider);
+
+    if (user != null) {
+      _syncFromFirestore(user.uid);
+    }
+
     final String? jsonString = prefs.getString(_storageKey);
     if (jsonString != null) {
       try {
@@ -106,6 +114,36 @@ class WaterNotifier extends Notifier<WaterState> {
     return defaultState;
   }
 
+  Future<void> _syncFromFirestore(String uid) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('waterData')
+          .doc('current_state')
+          .get();
+      
+      if (doc.exists && doc.data() != null) {
+        final firestoreState = WaterState.fromJson(doc.data()!);
+        final today = DateTime.now();
+        if (_isSameDay(today, firestoreState.lastResetDate)) {
+          state = firestoreState;
+        } else {
+          state = firestoreState.copyWith(
+            logs: [],
+            lastResetDate: today,
+          );
+          _saveState();
+        }
+        // Update local cache
+        final prefs = ref.read(sharedPreferencesProvider);
+        await prefs.setString(_storageKey, jsonEncode(state.toJson()));
+      }
+    } catch (e) {
+      // Failed to load from firestore, keep using local state
+    }
+  }
+
   bool _isSameDay(DateTime d1, DateTime d2) {
     return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
   }
@@ -125,6 +163,20 @@ class WaterNotifier extends Notifier<WaterState> {
     final prefs = ref.read(sharedPreferencesProvider);
     final targetState = stateToSave ?? state;
     await prefs.setString(_storageKey, jsonEncode(targetState.toJson()));
+
+    final user = ref.read(authProvider);
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .collection('waterData')
+            .doc('current_state')
+            .set(targetState.toJson());
+      } catch (e) {
+        // Silent fail, offline support
+      }
+    }
   }
 
   void addWater(int amount) {

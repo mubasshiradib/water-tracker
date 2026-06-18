@@ -5,11 +5,15 @@ import 'ui/screens/home_screen.dart';
 import 'providers/water_provider.dart';
 import 'package:water_tracker/core/services/notification_service.dart';
 import 'package:water_tracker/core/services/gemma_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'providers/auth_provider.dart';
+import 'ui/screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize services
+  await Firebase.initializeApp();
   await NotificationService().initialize();
   await GemmaService().initialize();
 
@@ -40,7 +44,22 @@ class WaterTrackerApp extends StatelessWidget {
           primary: const Color(0xFFFF6B6B),
         ),
       ),
-      home: const HomeScreen(),
+      home: const AuthGate(),
     );
+  }
+}
+
+class AuthGate extends ConsumerWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authProvider);
+    
+    if (user != null) {
+      return const HomeScreen();
+    }
+    
+    return const LoginScreen();
   }
 }
