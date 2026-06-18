@@ -1,5 +1,3 @@
-import 'package:flutter_gemma/flutter_gemma.dart';
-
 class GemmaService {
   static final GemmaService _instance = GemmaService._internal();
   factory GemmaService() => _instance;
@@ -24,10 +22,12 @@ class GemmaService {
     */
   }
 
-  Future<String> generateReminderMessage({required int currentIntake, required int dailyGoal}) async {
+  Future<String> generateReminderMessage(
+      {required int currentIntake, required int dailyGoal}) async {
     if (_isInitialized && _gemmaPlugin != null) {
       try {
-        final prompt = "Write a friendly, motivational hydration reminder for a water tracking app. The user has drank $currentIntake ml out of a daily goal of $dailyGoal ml today, and they are behind schedule. Keep it under 15 words.";
+        final prompt =
+            "Write a friendly, motivational hydration reminder for a water tracking app. The user has drank $currentIntake ml out of a daily goal of $dailyGoal ml today, and they are behind schedule. Keep it under 15 words.";
         final response = await _gemmaPlugin.getResponse(prompt: prompt);
         if (response != null && response.trim().isNotEmpty) {
           return response.trim();
@@ -41,7 +41,9 @@ class GemmaService {
   }
 
   String _generateFallbackMessage(int currentIntake, int dailyGoal) {
-    final percentage = dailyGoal > 0 ? (currentIntake / dailyGoal * 100).toStringAsFixed(0) : "0";
+    final percentage = dailyGoal > 0
+        ? (currentIntake / dailyGoal * 100).toStringAsFixed(0)
+        : "0";
     final messages = [
       "Time for a refreshing glass! You've had $currentIntake of $dailyGoal ml ($percentage%) today.",
       "Stay hydrated! Just a small glass helps you reach your $dailyGoal ml target.",

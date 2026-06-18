@@ -9,6 +9,7 @@ import 'dart:ui';
 import '../../providers/water_provider.dart';
 import '../../core/services/notification_service.dart';
 import '../../core/services/gemma_service.dart';
+import '../../providers/auth_provider.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/daily_progress.dart';
 import '../widgets/log_history.dart';
@@ -205,32 +206,66 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                         ),
                       ),
                       // Settings Button
-                      IconButton(
-                        tooltip: 'Settings',
-                        icon: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.8),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFFFF9696).withValues(alpha: 0.1),
-                                blurRadius: 12,
-                                spreadRadius: -2,
-                                offset: const Offset(0, 4),
+                      Row(
+                        children: [
+                          IconButton(
+                            tooltip: 'Sign Out',
+                            icon: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFFFF9696).withValues(alpha: 0.1),
+                                    blurRadius: 12,
+                                    spreadRadius: -2,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
                               ),
-                            ],
+                              child: const Icon(
+                                Icons.logout_rounded,
+                                color: Color(0xff331A1A),
+                                size: 22,
+                              ),
+                            ),
+                            onPressed: () {
+                              ref.read(authProvider.notifier).signOut();
+                            },
                           ),
-                          child: const Icon(
-                            Icons.settings_rounded,
-                            color: Color(0xff331A1A),
-                            size: 22,
+                          const SizedBox(width: 8),
+                          IconButton(
+                            tooltip: 'Settings',
+                            icon: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFFFF9696).withValues(alpha: 0.1),
+                                    blurRadius: 12,
+                                    spreadRadius: -2,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                Icons.settings_rounded,
+                                color: Color(0xff331A1A),
+                                size: 22,
+                              ),
+                            ),
+                            onPressed: () => _showSettingsDialog(context, state.dailyGoal, state.remindersEnabled, notifier),
                           ),
-                        ),
-                        onPressed: () => _showSettingsDialog(context, state.dailyGoal, state.remindersEnabled, notifier),
+                        ],
                       ),
                     ],
                   ),
