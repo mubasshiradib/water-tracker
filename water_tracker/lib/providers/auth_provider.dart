@@ -1,17 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
-  return AuthNotifier();
-});
-
-class AuthNotifier extends StateNotifier<User?> {
+class AuthNotifier extends Notifier<User?> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  AuthNotifier() : super(null) {
-    _auth.authStateChanges().listen((user) {
+  @override
+  User? build() {
+    final sub = _auth.authStateChanges().listen((user) {
       state = user;
     });
+    ref.onDispose(() => sub.cancel());
+    return _auth.currentUser;
   }
 
   Future<void> signInWithEmailPassword(String email, String password) async {
@@ -26,3 +25,5 @@ class AuthNotifier extends StateNotifier<User?> {
     await _auth.signOut();
   }
 }
+
+final authProvider = NotifierProvider<AuthNotifier, User?>(AuthNotifier.new);

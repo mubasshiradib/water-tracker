@@ -18,7 +18,7 @@ class WaterState {
     required this.remindersEnabled,
   });
 
-  int get currentIntake => logs.fold(0, (sum, log) => sum + log.amount);
+  int get currentIntake => logs.fold(0, (total, log) => total + log.amount);
   double get progressPercentage =>
       dailyGoal > 0 ? (currentIntake / dailyGoal).clamp(0.0, 1.0) : 0.0;
 
